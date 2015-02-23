@@ -169,7 +169,7 @@ def next(gs):
     tail = snake['coords'][-1]
     food = _get_closest_food(gs, head)
 
-    if _calc_distance(food, head) < 4:
+    if _calc_distance(food, head) < len(gs['board']) / 2:
         dest = food
     else:
         dest = tail
