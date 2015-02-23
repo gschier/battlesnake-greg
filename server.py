@@ -44,4 +44,4 @@ if len(sys.argv) == 2:
     port = int(sys.argv[1])
     constants.SNAKE_NAME = '%s:%s' % (constants.SNAKE_NAME, port)
 
-run(host='localhost', port=port)
+run(host='0.0.0.0', port=port)
