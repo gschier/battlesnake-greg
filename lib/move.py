@@ -173,6 +173,8 @@ def next(gs):
     # Get the closest food
     head = snake['coords'][0]
     tail = snake['coords'][-1]
+
+    # TODO: Choose food that's closest to your own body (Stay tight)
     food = _get_closest_food(gs, head)
 
     if _calc_distance(food, head) < len(gs['board']) / 4 or random.randint(0, 15) == 0:
