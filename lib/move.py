@@ -201,7 +201,7 @@ def _stay_safe(gs, snake, head):
     # TODO: Choose food that's closest to your own body (Stay tight)
     food = _get_closest_food(gs, head)
     food_distance = _calc_distance(food, head)
-    if food_distance < 2 or random.randint(0, 25) == 0:
+    if food_distance < 3 or random.randint(0, 15) == 0:
         dest = food
     else:
         dest = tail
