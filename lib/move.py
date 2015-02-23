@@ -169,7 +169,7 @@ def next(gs):
     tail = snake['coords'][-1]
     food = _get_closest_food(gs, head)
 
-    if _calc_distance(food, head) < len(gs['board']) / 2:
+    if _calc_distance(food, head) < len(gs['board']) / 4:
         dest = food
     else:
         dest = tail
@@ -184,10 +184,14 @@ def next(gs):
     next_point = _make_point(head, move)
     print 'NEXT POINT  ', next_point
 
-    safe_points = _get_safe_points(gs, head, min_moves=20)
+    my_length = len(snake['coords'])
+    safe_points = _get_safe_points(gs, head, min_moves=(my_length * 1.2))
     if len(safe_points) == 0:
-        # If there are no safe moves with < 20 future, pick best one
-        safe_points = _get_safe_points(gs, head, min_moves=None)
+        safe_points = _get_safe_points(gs, head, min_moves=my_length / 2)
+        if len(safe_points) == 0:
+            safe_points = _get_safe_points(gs, head, min_moves=10)
+            if len(safe_points) == 0:
+                safe_points = _get_safe_points(gs, head, min_moves=0)
 
     print 'SAFE POINTS ', safe_points
     if next_point not in safe_points:
