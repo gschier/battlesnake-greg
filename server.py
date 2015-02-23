@@ -1,3 +1,6 @@
+from gevent import monkey
+monkey.patch_all()
+
 import json
 import sys
 
@@ -40,8 +43,13 @@ def end():
 
 # Expose WSGI app
 port = 8081
-if len(sys.argv) == 2:
-    port = int(sys.argv[1])
+ip = 'localhost'
+
+if len(sys.argv) == 3:
+    ip = sys.argv[1]
+    port = int(sys.argv[2])
+
+if ip == 'localhost':
     constants.SNAKE_NAME = '%s:%s' % (constants.SNAKE_NAME, port)
 
-run(host='0.0.0.0', port=port)
+run(host=ip, port=port, server='gevent')
