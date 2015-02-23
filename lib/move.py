@@ -206,8 +206,6 @@ def _stay_safe(gs, snake, head):
     else:
         dest = tail
 
-    dest = [0, 0]
-
     # Get a direction vector (might be diagonal)
     move = _make_move_from_points(head, dest)
     next_point = _make_point(head, move)
