@@ -199,7 +199,7 @@ def next(gs):
 
     return {
         'move': _get_move(move),
-        'taunt': 'Foo Bar'
+        'taunt': None
     }
 
 
