@@ -25,10 +25,9 @@ def _count_moves(gs, start, count=0):
     if count > 100:
         return count
 
+    best_count = 0
     for point in points:
         if _is_on_board(gs, point) and not _is_snake(gs, point):
-            count = count + 1
-
             # Add new position to snake
             snake = _get_snake(gs, constants.SNAKE_NAME)
             snake['coords'].insert(0, point)
@@ -39,9 +38,11 @@ def _count_moves(gs, start, count=0):
                 'snake': snake['name']
             }
 
-            count = _count_moves(gs, point, count)
+            c = _count_moves(gs, point, count + 1)
+            if c > best_count:
+                best_count = c
 
-    return count
+    return count + best_count
 
 
 def _calc_distance(a, b):
@@ -95,6 +96,10 @@ def _make_move_from_points(a, b):
     return move
 
 
+def _has_just_eaten(snake):
+    return snake['coords'][-1] == snake['coords'][-2]
+
+
 def _is_on_board(gs, point):
     if point[0] < 0 or point[1] < 0:
         return False
@@ -107,9 +112,15 @@ def _is_on_board(gs, point):
 
 def _is_snake(gs, point):
     for snake in gs['snakes']:
-        # Ignore tails
-        if point in snake['coords'][:-1]:
+        if _has_just_eaten(snake):
+            # Don't ignore tail if has just eaten
+            body = snake['coords'][:]
+        else:
+            body = snake['coords'][:-1]
+
+        if point in body:
             return True
+
     return False
 
 
@@ -124,22 +135,23 @@ def _get_surrounding_points(gs, point):
     return points
 
 
-def _get_safe_points(gs, point, min_moves=None):
-    points = _get_surrounding_points(gs, point)
+def _get_safe_points(gs, start, min_moves=None):
+    points = _get_surrounding_points(gs, start)
     safe_points = []
     for point in points:
         num_moves = _count_moves(gs, point)
-        if min_moves and num_moves < min_moves:
-            print point, 'only has', num_moves, 'moves'
+        if min_moves > 0 and num_moves < min_moves:
             continue
         if not _is_on_board(gs, point):
-            print point, 'isnt on board'
             continue
         if _is_snake(gs, point):
-            print point, 'is snake'
             continue
 
         safe_points.append(point)
+
+    if min_moves > 0 and len(safe_points) == 0:
+        # If no safe points found, try again with less precision
+        return _get_safe_points(gs, start, min_moves / 2)
 
     return safe_points
 
@@ -167,47 +179,63 @@ def _get_closest_food(gs, point):
     return closest
 
 
-def next(gs):
-    snake = _get_snake(gs, constants.SNAKE_NAME)
+def _chase_tail(gs, snake, head):
+    tail = snake['coords'][-1]
+    desired_move = _make_move_from_points(head, tail)
+    desired_point = _make_point(head, desired_move)
 
-    # Get the closest food
-    head = snake['coords'][0]
+    safe_points = _get_safe_points(gs, head, min_moves=0)
+
+    print 'SAFE POINTS', safe_points
+
+    if desired_point not in safe_points:
+        safe_point = random.choice(safe_points)
+        return _make_move_from_points(head, safe_point)
+    else:
+        return desired_move
+
+
+def _stay_safe(gs, snake, head):
     tail = snake['coords'][-1]
 
     # TODO: Choose food that's closest to your own body (Stay tight)
     food = _get_closest_food(gs, head)
-
-    if _calc_distance(food, head) < len(gs['board']) / 4 or random.randint(0, 15) == 0:
+    food_distance = _calc_distance(food, head)
+    if food_distance < 2 or random.randint(0, 25) == 0:
         dest = food
     else:
         dest = tail
 
-    print '--------------------------------------------------'
-    print 'CURRENT HEAD', head
-    print 'CLOSEST FOOD', food, _calc_distance(food, head)
-    print 'CLOSEST DEST', dest
+    dest = [0, 0]
 
-    # Get a direction vector ot the food (may be diagonal)
+    # Get a direction vector (might be diagonal)
     move = _make_move_from_points(head, dest)
     next_point = _make_point(head, move)
-    print 'NEXT POINT  ', next_point
 
     my_length = len(snake['coords'])
-    safe_points = _get_safe_points(gs, head, min_moves=(my_length * 1.2))
-    if len(safe_points) == 0:
-        safe_points = _get_safe_points(gs, head, min_moves=my_length / 2)
-        if len(safe_points) == 0:
-            safe_points = _get_safe_points(gs, head, min_moves=10)
-            if len(safe_points) == 0:
-                safe_points = _get_safe_points(gs, head, min_moves=0)
+    safe_points = _get_safe_points(gs, head, min_moves=(my_length * 2))
 
-    print 'SAFE POINTS ', safe_points
-    if next_point not in safe_points:
+    print 'SNAKE', snake['coords']
+    print 'HEAD', head
+    print 'SAFE POINTS', safe_points
+
+    if len(safe_points) and next_point not in safe_points:
         next_point = random.choice(safe_points)
-        print 'SAFE POINT  ', next_point
         move = _make_move_from_points(head, next_point)
 
-    print 'MOVE        ', move
+    return move
+
+
+def next(gs):
+    snake = _get_snake(gs, constants.SNAKE_NAME)
+    print '----------------------------------------------------------'
+
+    # Get the closest food
+    head = snake['coords'][0]
+
+    move = _stay_safe(gs, snake, head)
+    # move = _chase_tail(gs, snake, head)
+    print 'MOVE', move
 
     return {
         'move': _get_move(move),

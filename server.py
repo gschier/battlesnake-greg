@@ -2,6 +2,7 @@ from gevent import monkey
 monkey.patch_all()
 
 import json
+import random
 import sys
 
 from bottle import request, route, run
@@ -51,5 +52,11 @@ if len(sys.argv) == 3:
 
 if ip == 'localhost':
     constants.SNAKE_NAME = '%s:%s' % (constants.SNAKE_NAME, port)
+    constants.SNAKE_COLOR = 'rgba(%s,%s,%s,%s)' % (
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 255),
+        random.randint(0, 100) / 100.0,
+    )
 
 run(host=ip, port=port, server='gevent')
