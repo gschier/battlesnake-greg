@@ -52,8 +52,14 @@ def _calc_distance(a, b):
 
 
 def _remove_diagonals(vector):
-    if vector[0] != 0:
-        vector[1] = 0
+    if random.randint(0, 1) == 0:
+        # Choose x
+        if vector[0] != 0:
+            vector[1] = 0
+    else:
+        # Choose y
+        if vector[1] != 0:
+            vector[0] = 0
 
     return vector
 
