@@ -1,5 +1,5 @@
 
 class constants(object):
-    SNAKE_NAME = 'Sleepy Snake'
-    SNAKE_HEAD = 'http://insomnia.rest/images/icon-small-back.png'
-    SNAKE_COLOR = '#423c70'
+    SNAKE_NAME = 'Adder Lovelace'
+    SNAKE_HEAD = 'http://i.imgur.com/aLvjFSp.png'
+    SNAKE_COLOR = '#F7931D'
