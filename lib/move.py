@@ -252,9 +252,9 @@ def _move(gs, snake, head):
     else:
         food_distance = _calc_distance(food, head)
 
-    if gs['turn'] < 10:
+    if gs['turn'] < 4:
         dest = tail
-    elif food and (food_distance < 3 or snake['health'] < 20):
+    elif food and (food_distance < 2 or snake['health'] < 40):
         dest = food
     else:
         gold = _get_closest_gold(gs, head)
@@ -264,7 +264,7 @@ def _move(gs, snake, head):
         else:
             gold_distance = _calc_distance(gold, head)
 
-        if gold_distance < 6:
+        if gold_distance < 10:
             dest = gold
         else:
             dest = tail
