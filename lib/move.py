@@ -2,8 +2,8 @@ import copy
 import math
 import random
 
-SNAKE_HEAD = 'http://insomnia.rest/images/icon-small-back.png'
-SNAKE_COLOR = '#423c70'
+SNAKE_HEAD = 'http://i.imgur.com/aLvjFSp.png'
+SNAKE_COLOR = '#F7931D'
 # SNAKE_ID = 'b86ce3e3-4517-43cb-843c-3c4742177908'
 SNAKE_ID = 'ee925ec8-01f4-4f08-a05d-617a97cad866'
 
