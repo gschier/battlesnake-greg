@@ -153,7 +153,7 @@ def _get_surrounding_points(gs, point, diagonals=False):
     ]
 
     if diagonals:
-        point.extend([
+        points.extend([
             [point[0] + 1, point[1] + 1],
             [point[0] - 1, point[1] - 1],
             [point[0] + 1, point[1] - 1],
