@@ -4,7 +4,8 @@ import random
 
 SNAKE_HEAD = 'http://insomnia.rest/images/icon-small-back.png'
 SNAKE_COLOR = '#423c70'
-SNAKE_ID = 'b86ce3e3-4517-43cb-843c-3c4742177908'
+# SNAKE_ID = 'b86ce3e3-4517-43cb-843c-3c4742177908'
+SNAKE_ID = '4ac21049-218e-421b-b4ef-c095e5032647'
 
 moves = {
     0: {
