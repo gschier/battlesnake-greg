@@ -269,7 +269,7 @@ def _move(gs, snake, head):
         else:
             gold_distance = _calc_distance(gold, head)
 
-        if gold_distance < 10:
+        if gold_distance < 12:
             dest = gold
         else:
             dest = tail
