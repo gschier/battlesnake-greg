@@ -136,6 +136,11 @@ def _is_snake(gs, point):
 
 def _is_potential_snake(gs, point):
     for snake in gs['snakes']:
+
+        # Don't want to count myself
+        if snake['id'] == SNAKE_ID:
+            continue
+
         head = snake['coords'][0]
         points = _get_surrounding_points(gs, head, diagonals=True)
         if point in points:
