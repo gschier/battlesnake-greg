@@ -137,20 +137,28 @@ def _is_snake(gs, point):
 def _is_potential_snake(gs, point):
     for snake in gs['snakes']:
         head = snake['coords'][0]
-        points = _get_surrounding_points(gs, head)
+        points = _get_surrounding_points(gs, head, diagonals=True)
         if point in points:
             return True
 
     return False
 
 
-def _get_surrounding_points(gs, point):
+def _get_surrounding_points(gs, point, diagonals=False):
     points = [
         [point[0] + 1, point[1]],
         [point[0] - 1, point[1]],
         [point[0], point[1] + 1],
-        [point[0], point[1] - 1]
+        [point[0], point[1] - 1],
     ]
+
+    if diagonals:
+        point.extend([
+            [point[0] + 1, point[1] + 1],
+            [point[0] - 1, point[1] - 1],
+            [point[0] + 1, point[1] - 1],
+            [point[0] - 1, point[1] + 1],
+        ])
 
     return points
 
