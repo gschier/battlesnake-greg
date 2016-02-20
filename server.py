@@ -1,4 +1,5 @@
 from gevent import monkey
+
 monkey.patch_all()
 
 import json
@@ -8,16 +9,15 @@ import sys
 from bottle import request, route, run
 
 from lib.constants import constants
-from lib.move import next
+from lib.move import next_move
 
 
 @route('/')
 def index():
-    return """
-        <a href="https://github.com/sendwithus/battlesnake-python">
-            battlesnake-python
-        </a>
-    """
+    return json.dumps({
+        'head': constants.SNAKE_HEAD,
+        'taunt': '...zzz...'
+    })
 
 
 @route('/start', method='POST')
@@ -32,7 +32,7 @@ def start():
 
 @route('/move', method='POST')
 def move():
-    move = next(request.json)
+    move = next_move(request.json)
 
     return json.dumps(move)
 
